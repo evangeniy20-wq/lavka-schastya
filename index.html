@@ -530,7 +530,7 @@ const ITEMS={
  kids:{w:'left',n:'Фигурки шоколадные',s:'шоколадные фигурки',p:250,r:[470,426,700,526]},
  vegan:{w:'left',n:'Веган-шоколад',s:'веган-шоколад',p:420,r:[790,293,905,362]},
  pralbar:{w:'left',n:'Плитка с пралине',s:'плитку с пралине',p:450,r:[668,293,790,362]},
- slab:{w:'left',n:'Ломаный шоколад',s:'ломаный шоколад',p:650,r:[725,462,1000,542],r2:[670,365,945,440]},
+ slab:{w:'left',n:'Ломаный шоколад',s:'ломаный шоколад',p:650,r:[702,365,1000,542]},
  iris:{w:'left',n:'Ириски',s:'ириски',p:320,r:[305,468,470,542]},
  orange:{w:'left',n:'Трюфель с виски',s:'трюфель с виски',p:2900,r:[128,468,288,548]},
  sbox:{w:'front',n:'Суфле',s:'суфле',p:1290,r:[350,224,532,286]},
@@ -561,7 +561,7 @@ const MAXS=k=>ITEMS[k].p<300?4:ITEMS[k].p<1000?3:2;const STK={};
 function updStk(k){const h=HOT[k];if(!h)return;const b=h.querySelector('.stk'),n=STK[k];b.style.display=n<=2?'block':'none';b.textContent=n<=0?'нет':n;b.classList.toggle('z',n<=0);h.classList.toggle('out',n<=0);if(HOT2[k])HOT2[k].classList.toggle('out',n<=0)}
 function restockAll(){for(const k in ITEMS)if(!DR[k]){STK[k]=MAXS(k);updStk(k)}}
 const hMon=hot(WALL.cash,'mon',[372,108,740,324],'Пробить чек',h=>punch(h));
-const hTerm=hot(WALL.cash,'term',[162,142,322,338],'Терминал&nbsp;— оплата картой',h=>payCard(h));
+const hTerm=hot(WALL.cash,'term',[162,142,322,338],'Терминал&nbsp;— оплата картой',h=>payCard(h));hTerm.style.display='none';
 const hPrn=hot(WALL.cash,'prn',[504,392,692,596],'Принтер чеков',h=>punch(h));
 const hMach=hot(WALL.coffee,'mach',[355,40,1010,560],'Кофемашина',h=>openCoffee());
 const hGrind=hot(WALL.coffee,'grind',[118,0,348,470],'Кофемолка',h=>openCoffee());
@@ -794,7 +794,7 @@ function hints(){
  }
  else if(c.wrap&&!c.wrapped){if(at==='cash'){t=wrapOn()?'Упакуй по&nbsp;просьбе гостя':'Нажми 🎁&nbsp;— упаковать подарок';if(!wrapOn()){cue.push(hWrap);tgt=hWrap}else tgt=$('#wsw').style.display!=='none'?$('#wsw'):$('#wact')}else{cueSt=1;t='Гость просил упаковку&nbsp;— иди на&nbsp;кассу'}}
  else if(!c.punched){if(at==='cash'){t='Нажми на&nbsp;монитор&nbsp;— пробить чек';cue.push(hMon);tgt=hMon}else{cueSt=1;t='Заказ собран. Иди на&nbsp;кассу'}}
- else if(!c.paid){if(at==='cash'){t='Нажми на&nbsp;терминал&nbsp;— оплата картой';cue.push(hTerm);tgt=hTerm}else{cueSt=1;t='Прими оплату на&nbsp;кассе'}}
+ else if(!c.paid){if(at==='cash'){t='Гость оплачивает картой…'}else{cueSt=1;t='Прими оплату на&nbsp;кассе'}}
  else{if(at==='front'){t='Нажми на&nbsp;гостя ('+c.reg.n+')&nbsp;— отдай покупку';tgt=c.cv}else{cueSt=0;t='Оплачено! Повернись к&nbsp;покупателю'}}
  const nw=front().filter(o=>o.st==='wait').length;if(c&&nw>1&&at==='front'&&hintOver<=0&&!(hq&&!c))t+=' · в очереди: '+nw+(matchMedia('(pointer:fine)').matches?' (Tab)':'');if(hq&&c&&at!=='cash'&&hintOver<=0)t+=' · 💳 касса: '+CQ().length;
  Q.forEach(o=>o.el.classList.toggle('cue',o===c&&c.paid&&at==='front'&&o.st==='wait'));
