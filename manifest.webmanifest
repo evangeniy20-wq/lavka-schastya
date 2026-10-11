@@ -1,0 +1,17 @@
+{
+  "name": "Лавка Счастья",
+  "short_name": "Лавка",
+  "description": "Ангел счастья в шоколадной лавке — пиксельная игра",
+  "lang": "ru",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "any",
+  "background_color": "#0b0e16",
+  "theme_color": "#141a28",
+  "icons": [
+    {"src": "icon192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
