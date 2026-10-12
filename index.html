@@ -579,6 +579,21 @@ body *{line-height:1.72!important;text-wrap-style:pretty}
 #stkb,#wipeb{padding:calc(var(--u)*4) calc(var(--u)*6)!important}
 #wipeb{top:calc(50% + var(--u)*46 + 68px)!important}
 #stage.portrait #wipeb{top:auto!important;bottom:calc(var(--u)*24 + 96px + 74px + env(safe-area-inset-bottom,0px))!important}
+/* выравнивание кнопок и текста */
+button{display:inline-flex;align-items:center;justify-content:center;text-align:center;line-height:1.2!important;gap:.35em}
+#stage button.ui,#nav button,.btns button,#tbtns button,#supply button,#stock button,#hbtns button,#cutskip,#upb{padding-top:.38em;padding-bottom:.3em}
+#supply .sbt{display:flex;flex-direction:row;gap:calc(var(--s)*6)}
+#supply .sbt button{flex:1 1 0;min-width:0;white-space:nowrap}
+#supply .sbt button,#supply #spsign{min-height:calc(var(--s)*28)}
+#supply #spsign{flex:none;white-space:normal;line-height:1.15!important}
+#stock .row{align-items:center}
+#stock .row button{min-width:calc(var(--u)*92);justify-content:center}
+#stage:not(.portrait) #supply .sbt button{font-size:calc(var(--s)*11.5);padding-left:calc(var(--s)*3);padding-right:calc(var(--s)*3);gap:.2em;border-image-width:6px}
+#stage:not(.portrait) #supply .sbt{gap:calc(var(--s)*4)}
+#stage:not(.portrait) #supply .sbt{flex-direction:column;align-items:stretch;gap:calc(var(--s)*4)}
+#stage:not(.portrait) #supply .sbt button{flex:none;font-size:calc(var(--s)*12.5);min-height:calc(var(--s)*24)}
+#stage:not(.portrait) #supply .sbt button{padding-left:calc(var(--s)*9)!important;padding-right:calc(var(--s)*9)!important;font-size:calc(var(--s)*12)}
+#stock .row b{text-align:right;line-height:1.15!important}
 </style>
 </head>
 <body>
@@ -871,7 +886,7 @@ let stW=null,stBusy=false;const stockOn=()=>$('#stock').classList.contains('on')
 function openStock(w){ensureAudio();stW=w;$('#cof').classList.remove('on');$('#stock').classList.add('on');stockUI()}
 function stockUI(){if(!stW)return;whInit();$('#sttl').textContent=stW==='cash'?'📦 Ящик под кассой':'📦 Склад под витриной';
  const ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w===stW&&!DR[k]);
- $('#srows').innerHTML=ks.map(k=>{const full=STK[k]>=MAXS(k),empty=S.wh[k]<=0;return '<div class="row'+(STK[k]<MAXS(k)?' low':'')+'"><span>'+ITEMS[k].n+' <span class="sm">· запас '+S.wh[k]+'</span></span><b>'+STK[k]+'/'+MAXS(k)+'</b><button data-k="'+k+'" '+(full||empty?'disabled':'')+'><i></i>'+(full?'Полно':empty?'Пусто':'Доложить')+'</button></div>'}).join('');
+ $('#srows').innerHTML=ks.map(k=>{const full=STK[k]>=MAXS(k),empty=S.wh[k]<=0;return '<div class="row'+(STK[k]<MAXS(k)?' low':'')+'"><span>'+ITEMS[k].n+'</span><b>'+STK[k]+'/'+MAXS(k)+'<br><span class="sm" style="font-weight:400;opacity:.8">склад '+S.wh[k]+'</span></b><button data-k="'+k+'" '+(full||empty?'disabled':'')+'><i></i>'+(full?'Полно':empty?'Пусто':'Доложить')+'</button></div>'}).join('');
  [...$('#srows').querySelectorAll('button')].forEach(b=>b.addEventListener('click',()=>{if(stBusy||b.disabled)return;stBusy=true;const k=b.dataset.k,bar=b.querySelector('i');sfx('rustle');
   bar.style.transition='width 1.1s linear';requestAnimationFrame(()=>bar.style.width='100%');b.lastChild.textContent='Несу…';
   handGo(STORE[stW],ICOL[k],'tap');setTimeout(()=>{const take=Math.min(Math.max(0,MAXS(k)-STK[k]),S.wh[k]);STK[k]+=take;S.wh[k]-=take;save();updStk(k);stBusy=false;sfx('ok');stockUI()},1100)}))}
