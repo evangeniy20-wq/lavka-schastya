@@ -572,6 +572,9 @@ body *{line-height:1.72!important;text-wrap-style:pretty}
 #stage:not(.portrait) #supply .spc{width:calc(var(--s)*800)!important;max-width:calc(100% - 12px)!important}
 #stage:not(.portrait) #sprows{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--s)*6)}
 #stage:not(.portrait) #supply .sr{padding:calc(var(--s)*4) calc(var(--s)*8)}
+#supply .sbody i{width:calc(var(--bw)*.17)!important;height:calc(var(--bw)*.17)!important;position:relative;z-index:1;border:calc(var(--s)*1.5) solid rgba(0,0,0,.55);border-radius:calc(var(--s)*2)}
+#supply .sbody.melt i{filter:sepia(1) saturate(1.6) brightness(.5)}
+#supply .sr.open .sbody i{animation:spop .35s cubic-bezier(.3,1.6,.5,1) forwards}
 </style>
 </head>
 <body>
@@ -1567,7 +1570,7 @@ function supplyArrive(){if(DEL.fired||!S.tut||!playing)return;DEL.fired=true;DEL
  const nd=S.day>=3&&Math.random()<.6?2:1;const idx=items.map((_,i)=>i).sort(()=>Math.random()-.5).slice(0,nd);
  idx.forEach((i,j)=>{items[i].def=Math.random()<.5?'short':'melt'});if(nd===2&&items[idx[0]].def===items[idx[1]].def)items[idx[1]].def=items[idx[0]].def==='short'?'melt':'short';
  DEL.items=items;COUR.querySelector('.cbub').innerHTML=S.supTut?'Поставка! 📋':'👆 Нажми!';courGo('in');setTimeout(()=>{if(DEL.pending&&COUR.classList.contains('in'))COUR.className='idle'},700);sfx('cart');setTimeout(()=>sfx('bell'),450);hintFlash('🚚 Приехала поставка! Нажми на грузчика')}
-const THUMB={};function itemThumb(k){if(THUMB[k])return THUMB[k];try{const it=ITEMS[k],img=$(WIMG[it.w]);const [x1,y1,x2,y2]=it.r,sx=img.naturalWidth/1280,sy=img.naturalHeight/720;const w=(x2-x1)*sx,h=(y2-y1)*sy,k2=Math.min(1,110/Math.max(w,h));const c=document.createElement('canvas');c.width=Math.max(8,Math.round(w*k2));c.height=Math.max(8,Math.round(h*k2));c.getContext('2d').drawImage(img,x1*sx,y1*sy,w,h,0,0,c.width,c.height);return THUMB[k]=c.toDataURL('image/webp',.85)}catch(e){return THUMB[k]=''}}
+const THUMB={};function itemThumb(k){return '';/* заглушка: пока без картинок товаров, ждём спрайты */if(THUMB[k])return THUMB[k];try{const it=ITEMS[k],img=$(WIMG[it.w]);const [x1,y1,x2,y2]=it.r,sx=img.naturalWidth/1280,sy=img.naturalHeight/720;const w=(x2-x1)*sx,h=(y2-y1)*sy,k2=Math.min(1,110/Math.max(w,h));const c=document.createElement('canvas');c.width=Math.max(8,Math.round(w*k2));c.height=Math.max(8,Math.round(h*k2));c.getContext('2d').drawImage(img,x1*sx,y1*sy,w,h,0,0,c.width,c.height);return THUMB[k]=c.toDataURL('image/webp',.85)}catch(e){return THUMB[k]=''}}
 function supRow(it,i){const q=it.def==='short'?it.n-1:it.n,c=ICOL[it.k]||'#ddd',th=itemThumb(it.k);
  const tiles=Array.from({length:q},(_,j)=>th?'<img src="'+th+'" alt="" style="animation-delay:'+(j*90)+'ms">':'<i style="background:'+c+';animation-delay:'+(j*70)+'ms"></i>').join('');
  return '<div class="sr'+(it.open?' open':'')+(it.dec==='ok'?' dok':it.dec==='no'?' dno':'')+'" data-i="'+i+'" style="animation-delay:'+(i*130)+'ms"><div class="sbx"><div class="sbody'+(it.def==='melt'?' melt':'')+'">'+tiles+(it.def==='melt'?'<u>💧</u>':'')+'</div><div class="slid"></div><em>Открыть</em></div>'+
