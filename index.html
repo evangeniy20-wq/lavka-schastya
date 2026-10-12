@@ -526,6 +526,27 @@ body *{line-height:1.72!important;text-wrap-style:pretty}
 @keyframes cbub{to{opacity:1;transform:scale(1)}}
 @keyframes cwv{50%{transform:rotate(-28deg)}}
 #stage:has(#stock.on) #cour,#stage:has(#cof.on) #cour,#stage:has(#wrapP.on) #cour{display:none!important}
+
+#supb{display:none!important}
+#cour{left:auto!important;right:0!important;width:calc(var(--u)*120);height:calc(var(--u)*170);bottom:calc(var(--u)*120 + env(safe-area-inset-bottom,0px))!important;overflow:visible!important;z-index:9}
+#stage.portrait #cour{bottom:calc(var(--u)*24 + 150px)!important;width:calc(var(--u)*150)}
+#cour .ccart{display:none!important}
+#cour .cman,#cour .cbub{pointer-events:auto;cursor:pointer}
+#cour .cman{left:auto!important;right:calc(var(--u)*6);transform-origin:50% 100%;scale:1.5;bottom:0}
+#cour .ca{top:calc(var(--u)*8)!important;left:calc(var(--u)*-6)!important;height:calc(var(--u)*22)!important;width:calc(var(--u)*10)!important;transform-origin:50% 100%}
+#cour .cbub{left:auto!important;right:calc(var(--u)*4);bottom:calc(var(--u)*150)!important;font-size:calc(var(--u)*14)}
+#cour.in .cman{animation:cin2 .7s cubic-bezier(.2,1.3,.4,1) both!important}
+#cour.in .cl1,#cour.in .cl2,#cour.out .cl1,#cour.out .cl2{animation:none!important}
+#cour.idle .cman{animation:cidle 1.6s ease-in-out infinite!important}
+#cour.idle .cbub{animation:cbub .4s cubic-bezier(.3,1.6,.5,1) forwards,cbob 1s ease-in-out .4s infinite!important}
+#cour.idle .ca{animation:cwv .5s ease-in-out infinite!important}
+#cour.out .cman{animation:cout2 .6s ease-in both!important}
+#cour.in .cbub{opacity:0}
+@keyframes cin2{from{transform:translateX(160px)}}
+@keyframes cout2{to{transform:translateX(180px)}}
+@keyframes cidle{50%{transform:translateY(calc(var(--u)*-4)) rotate(-3deg)}}
+@keyframes cbob{50%{transform:translateY(calc(var(--u)*-5))}}
+#stage:has(#supply.on) #cour{display:none!important}
 </style>
 </head>
 <body>
@@ -880,7 +901,7 @@ let yaw=0,yawT=0,mx=0,my=0,tmx=0,tmy=0,lastIn=-1e9;
 const nav=$('#nav');ST.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.n;b.addEventListener('click',()=>{ensureAudio();goTo(i)});nav.appendChild(b)});
 function goTo(i){let d=((i-vi)%4+4)%4;if(d===3)d=-1;turnBy(d)}
 function turnBy(d){if(!d||paused)return;yawT=Math.round(yawT/90)*90;vi=((Math.round(yawT/90)+d)%4+4)%4;$('#stock').classList.remove('on');$('#wrapP').classList.remove('on');yawT+=d*90;sfx('whoosh');updNav();if(ST[vi].id!=='coffee')$('#cof').classList.remove('on');else if(anyDrinks())openCoffee(true)}
-function updNav(){const sb=$('#stkb');if(sb)sb.style.display=ST[vi].id==='coffee'?'none':'';const xb=$('#supb');if(xb)xb.style.visibility=ST[vi].id==='coffee'?'hidden':'';const wb=$('#wipeb');if(wb)wb.style.display=(ST[vi].id==='front'||ST[vi].id==='left')?'':'none';[...nav.children].forEach((b,i)=>b.classList.toggle('on',i===vi));$('#tl span').textContent=ST[(vi+3)%4].n;$('#tr span').textContent=ST[(vi+1)%4].n}
+function updNav(){const sb=$('#stkb');if(sb)sb.style.display=ST[vi].id==='coffee'?'none':'';const xb=$('#cour');if(xb)xb.style.visibility=ST[vi].id==='coffee'?'hidden':'';const wb=$('#wipeb');if(wb)wb.style.display=(ST[vi].id==='front'||ST[vi].id==='left')?'':'none';[...nav.children].forEach((b,i)=>b.classList.toggle('on',i===vi));$('#tl span').textContent=ST[(vi+3)%4].n;$('#tr span').textContent=ST[(vi+1)%4].n}
 $('#tl').addEventListener('click',()=>{ensureAudio();turnBy(-1)});$('#tr').addEventListener('click',()=>{ensureAudio();turnBy(1)});
 const cofOn=()=>$('#cof').classList.contains('on');
 addEventListener('keydown',e=>{if(e.repeat)return;const k=e.key;if(k==='ArrowLeft'||k==='a'||k==='A'||k==='ф'||k==='Ф')turnBy(-1);if(k==='ArrowRight'||k==='d'||k==='D'||k==='в'||k==='В')turnBy(1);
@@ -1502,7 +1523,7 @@ const DEL={fired:false,pending:false,items:null,no:0};
 const SUPB=document.createElement('button');SUPB.id='supb';SUPB.className='ui';SUPB.innerHTML='🚚 Поставка';stage.appendChild(SUPB);
 const SP=document.createElement('div');SP.id='supply';SP.innerHTML='<div class="spc pnl"><div class="sph"><b>🚚 Поставка</b><span id="spno"></span><button id="spx" aria-label="Закрыть">×</button></div><div id="sprows"></div><div class="spf"><span id="spmsg"></span><button id="spsign" disabled>Подписать накладную</button></div><div id="spstamp"></div></div>';stage.appendChild(SP);
 
-const COUR=document.createElement('div');COUR.id='cour';COUR.innerHTML='<div class="cbub">Поставка! Распишитесь 📋</div><div class="cman"><i class="cc"></i><i class="ch"></i><i class="cb"></i><i class="ca"></i><i class="cl1"></i><i class="cl2"></i></div><div class="ccart"><i class="bx b1"></i><i class="bx b2"></i><i class="bx b3"></i><i class="bx b4"></i><i class="wh w1"></i><i class="wh w2"></i></div>';stage.appendChild(COUR);
+const COUR=document.createElement('div');COUR.id='cour';COUR.innerHTML='<div class="cbub">Поставка! 📋</div><div class="cman"><i class="cc"></i><i class="ch"></i><i class="cb"></i><i class="ca"></i><i class="cl1"></i><i class="cl2"></i></div><div class="ccart"><i class="bx b1"></i><i class="bx b2"></i><i class="bx b3"></i><i class="bx b4"></i><i class="wh w1"></i><i class="wh w2"></i></div>';stage.appendChild(COUR);
 function courGo(m){COUR.className='';void COUR.offsetWidth;if(m)COUR.className=m}
 const SPS={on:false};
 function supplyArrive(){if(DEL.fired||!S.tut||!playing)return;DEL.fired=true;DEL.pending=true;DEL.no=1000+(Math.random()*9000|0);
@@ -1535,7 +1556,7 @@ function supSign(){if(!DEL.pending||SPS.signing)return;SPS.signing=true;let gain
  $('#spmsg').textContent=msg.trim()||'Поставка принята';hud();mbump();
  DEL.pending=false;SUPB.classList.remove('on');setTimeout(()=>{courGo('out');sfx('whoosh')},800);
  setTimeout(()=>{closeSupply();SPS.signing=false;hintFlash('📦 Поставка принята — полки пополнены')},1900)}
-SUPB.addEventListener('click',e=>{e.stopPropagation();openSupply()});$('#spsign').addEventListener('click',supSign);$('#spx').addEventListener('click',closeSupply);
+SUPB.addEventListener('click',e=>{e.stopPropagation();openSupply()});COUR.querySelector('.cman').addEventListener('click',e=>{e.stopPropagation();openSupply()});COUR.querySelector('.cbub').addEventListener('click',e=>{e.stopPropagation();openSupply()});$('#spsign').addEventListener('click',supSign);$('#spx').addEventListener('click',closeSupply);
 ['pointerdown','touchstart','touchmove','wheel'].forEach(t=>SP.addEventListener(t,e=>e.stopPropagation(),{passive:true}));
 function supplyReset(){courGo('');DEL.fired=false;DEL.pending=false;DEL.items=null;SUPB.classList.remove('on');closeSupply();for(const k in DEF)delete DEF[k]}
 window.__sup={DEL,supplyArrive,openSupply,supSign,closeSupply};
