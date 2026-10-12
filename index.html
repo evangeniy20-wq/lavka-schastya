@@ -528,9 +528,9 @@ function buildPano(){const pn=$('#pano');pn.innerHTML='';
 function layout(){
  PORT=innerHeight>innerWidth*1.05;
  if(PORT){SH=Math.min(innerHeight*.52,innerWidth*1.3);SW=SH*16/9;P=SW/2;stage.style.width=innerWidth+'px';stage.style.height=innerHeight+'px';
-  document.documentElement.style.setProperty('--u',(innerWidth/560)+'px')}
+  document.documentElement.style.setProperty('--u',(innerWidth/560*.85)+'px')}
  else{SW=Math.min(innerWidth,innerHeight*16/9);SH=SW*9/16;P=SW/2;stage.style.width=SW+'px';stage.style.height=SH+'px';
-  document.documentElement.style.setProperty('--u',(SW/1280)+'px')}
+  document.documentElement.style.setProperty('--u',(SW/1280*(SH<560?.82:1))+'px')}
  stage.classList.toggle('portrait',PORT);{const u=$('#upb');if(u){if(PORT&&u.parentNode.id==='ord'){stage.appendChild(u);u.classList.add('ui','floatup')}else if(!PORT&&u.parentNode!==$('#ord')){$('#ord').insertBefore(u,$('#ups'));u.classList.remove('ui','floatup')}}}document.documentElement.style.setProperty('--sh',SH+'px');view.style.perspective=P+'px';
  const r=stage.getBoundingClientRect();dpr=Math.min(devicePixelRatio||1,2);fx.width=r.width*dpr;fx.height=r.height*dpr;
  const fw=2*FD*P*TH,fh=SH*FD;
