@@ -1461,8 +1461,7 @@ const HZ={"walk": [122, 300, 291, 296], "happy": [103, 300, 234, 297], "serve": 
 // fk: sf | happy | joy | sad | tap | bow | hold | sw | talk | wow | wr0-7 | wl0-7 ; feet at (x,y); stand height = hwT*2.1
 function drawHeroSprite(g,fk,x,y,hwT,alpha){const tt=performance.now()/1000,walk=/^w[lr]/.test(fk);let sh='idle',fr=Math.floor(tt*4)%8,flip=false;
  if(walk){sh='walk';fr=(+fk.slice(2)||0)%8;flip=fk[1]==='l'}
- else if(fk==='happy'||fk==='joy'){sh='happy';fr=Math.floor(tt*8)%8}else if(fk==='wow'){sh='happy';fr=1}
- else if(fk==='tap'){sh='serve';fr=5}else if(fk==='bow'){sh='serve';fr=1}else if(fk==='hold'){sh='serve';fr=2}else if(fk==='sw'){sh='serve';fr=3}
+ else if(fk==='happy'||fk==='joy'){sh='happy';fr=Math.floor(tt*8)%8}else if(fk==='tap'||fk==='bow'){sh='serve';fr=5}
  else if(fk==='sad'){fr=0}
  const im=HZI[sh],m=HZ[sh];if(!im||!im.complete||!im.naturalWidth)return 0;const w=m[0],h=m[1],k=hwT*2.1/m[2];let rot=0;
  if(walk){const ph=(window.__hph??((+fk.slice(2)||0)/8))*Math.PI*2;rot=Math.sin(ph)*.015}
