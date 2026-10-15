@@ -1649,6 +1649,20 @@ function drawSign(g,x,y,open,flip){const R=(a,b,w,h,c)=>{g.fillStyle=c;g.fillRec
  R(x-16,y-2,2,2,'#1a1210');R(x+14,y-2,2,2,'#1a1210');R(x-15,y-26,2,24,'#5a3420');R(x+13,y-26,2,24,'#5a3420');
  const w=Math.max(2,36*flip);R(x-w/2-1,y-27,w+2,15,'#1a1210');R(x-w/2,y-26,w,13,open?'#1f6a42':'#7a1f1a');
  if(flip>.5){g.fillStyle='#fff';g.font='bold 6px sans-serif';g.textAlign='center';g.textBaseline='middle';g.fillText(open?'ОТКРЫТО':'ЗАКРЫТО',x,y-19.5)}}
+/* ---------- background life: shoppers riding the escalators (procedural silhouettes until real sprites arrive) ---------- */
+const ESC=[{x0:140,y0:70.5,x1:226,y1:34,n:6,v:.055,seed:3},{x0:121,y0:76,x1:191,y1:33,n:5,v:-.05,seed:11}];
+const ESCP=[['#232a3d','#c9a283'],['#3a2433','#caa07f'],['#1f3b3a','#d3ad8c'],['#4a3a2a','#c59b7a'],['#2d2d38','#cfa882'],['#5a2f3a','#d6b090'],['#3c4a66','#c8a07e'],['#1c1c24','#cba685']];
+function drawEsc(g,t,br){const rnd=k=>{const x=Math.sin(k*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+ for(const E of ESC){for(let i=0;i<E.n;i++){const gap=1/E.n,jit=(rnd(E.seed+i*3.3)-.5)*gap*.5;let u=((i*gap+jit+t*E.v)%1+1)%1;
+  const x=E.x0+(E.x1-E.x0)*u,y=E.y0+(E.y1-E.y0)*u,pal=ESCP[Math.floor(rnd(E.seed+i)*ESCP.length)],hgt=rnd(E.seed+i*7)>.7?1:0,bob=Math.sin(t*3+i)>.8?-.5:0;
+  const edge=Math.min(1,u*8,(1-u)*8);if(edge<=0)continue;g.globalAlpha=edge;
+  const sh=c=>{const n=parseInt(c.slice(1),16),r=n>>16&255,gg=n>>8&255,b=n&255,k=br;return 'rgb('+Math.round(r*k)+','+Math.round(gg*k)+','+Math.round(b*k)+')'};
+  const bx=Math.round(x),by=Math.round(y+bob);
+  g.fillStyle=sh(pal[0]);g.fillRect(bx-2,by-5-hgt,4,5+hgt);          // coat
+  g.fillStyle=sh('#000000');g.globalAlpha=edge*.28;g.fillRect(bx-2,by-2,4,2);g.globalAlpha=edge;  // lower shade
+  g.fillStyle=sh(pal[1]);g.fillRect(bx-1,by-8-hgt,2,3);               // face
+  g.fillStyle=sh('#1d120e');g.fillRect(bx-1,by-9-hgt,2,1);g.fillRect(bx-2,by-8-hgt,1,2); // hair
+ }}g.globalAlpha=1}
 function drawCut(){const g=cg,W=320,H=180,t=CUT.t,op=CUT.kind==='open';g.setTransform(4,0,0,4,0,0);g.clearRect(0,0,W,H);g.imageSmoothingEnabled=false;
  let cover,light,signOpen,hx,fk='sf',say='',hAlpha=1,sflip;
  const HX=128,OUT=345,STR=66;let wf=0;const lin=k=>k<0?0:k>1?1:k;
@@ -1677,6 +1691,7 @@ function drawCut(){const g=cg,W=320,H=180,t=CUT.t,op=CUT.kind==='open';g.setTran
  if(ok(KMORN))g.drawImage(KMORN,0,0,W,H);else{g.fillStyle='#1b2236';g.fillRect(0,0,W,H)}
  if(!op&&light<1){g.fillStyle='rgba(8,10,24,'+(.42*(1-light)).toFixed(3)+')';g.fillRect(0,0,W,H)}
  const lit=op?KDAY:KEVE;if(light>0&&ok(lit)){g.globalAlpha=light;g.drawImage(lit,0,0,W,H);g.globalAlpha=1}
+ drawEsc(g,t+(op?0:20),.5+.5*light);
  drawCloth(g,VIT,cover,t);drawCloth(g,MACH,cover,t);
  drawSign(g,232,FEET-4,signOpen,sflip);
  g.fillStyle='rgba(0,0,0,.3)';g.fillRect(Math.round(hx-13),FEET-2,26,4);
