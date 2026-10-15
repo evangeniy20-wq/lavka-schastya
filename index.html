@@ -526,7 +526,7 @@ body *{line-height:1.72!important;text-wrap-style:pretty}
 @keyframes sbox{0%{background-position:20% 0}25%{background-position:40% 0}50%{background-position:60% 0}75%,100%{background-position:100% 0}}
 #spgirl{flex:none;width:calc(var(--s)*25);height:calc(var(--s)*76);background:var(--hu-idle) 0 0/800% 100% no-repeat;animation:hmv 1.6s steps(8) infinite}
 #spgirl.m1{animation:hmv 1.6s steps(8) infinite}
-#spgirl.m2,#spgirl.st{width:calc(var(--s)*37);height:calc(var(--s)*95);margin-top:calc(var(--s)*-19);background-image:var(--hu-happy);animation:hmf 1.6s steps(7) forwards}
+#spgirl.m2,#spgirl.st{width:calc(var(--s)*37);height:calc(var(--s)*95);margin-top:calc(var(--s)*-19);background-image:var(--hu-happy);animation:hmf 1.25s steps(7) forwards}
 @keyframes hmv{from{background-position:0 0}to{background-position:114.2857% 0}}
 @keyframes hmf{from{background-position:0 0}to{background-position:100% 0}}
 #stage.portrait #spstamp{font-size:calc(var(--s)*20);padding:calc(var(--s)*5) calc(var(--s)*12)}
@@ -1461,7 +1461,7 @@ const HZ={"walk": [150, 300, 291, 296], "happy": [116, 300, 234, 297], "idle": [
 // fk: sf | happy | joy | sad | tap | bow | hold | sw | talk | wow | wr0-7 | wl0-7 ; feet at (x,y); stand height = hwT*2.1
 function drawHeroSprite(g,fk,x,y,hwT,alpha){const tt=performance.now()/1000,walk=/^w[lr]/.test(fk);let sh='idle',fr=Math.floor(tt*4)%8,flip=false;
  if(walk){sh='walk';flip=fk[1]==='l';let ph=window.__hph??((+fk.slice(2)||0)/8);if(flip)ph=-ph;fr=[0,4,3,2,5,6,1,7][Math.floor(((ph%1)+1)%1*8)]}
- else if(fk==='happy'||fk==='joy'){sh='happy';fr=Math.floor((window.__hT??tt)*5)%8}
+ else if(fk==='happy'||fk==='joy'){sh='happy';fr=Math.floor((window.__hT??tt)*6.5)%8}
  else if(fk==='sad'){fr=0}
  const im=HZI[sh],m=HZ[sh];if(!im||!im.complete||!im.naturalWidth)return 0;const w=m[0],h=m[1],k=hwT*2.1/m[2];let rot=0;
  if(walk){const ph=(window.__hph??((+fk.slice(2)||0)/8))*Math.PI*2;rot=Math.sin(ph*2)*.01}
