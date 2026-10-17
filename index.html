@@ -850,7 +850,7 @@ function orderLine(c){const ents=Object.entries(c.order).filter(([k])=>k!==c.usu
  const h=hearts(c.reg.n);let line=(h>=1?rnd(LINES.hiReg):rnd(LINES.hi))+' <b>'+last+'</b>.';
  if(c.reg.fav&&h<2&&c.order[c.reg.fav]&&Math.random()<.6)line+=' '+FAVTALK[c.reg.fav];if(c.wrap)line+=' И&nbsp;упакуйте, пожалуйста, в&nbsp;белую коробку с&nbsp;<b>'+BOWS[c.wrap.b].n+'</b> бантом!';return line}
 function say(c,t,keep){c.bub.innerHTML=t;if(c===act||!act)$('#oline').innerHTML='💬 '+t;c.bub.classList.remove('off');c.talk=Math.min(2.4,.4+t.replace(/<[^>]+>/g,'').length*.035);c.bubT=keep?99:4;c.speak=performance.now();c.voiceT=Math.min(2.2,.25+t.replace(/<[^>]+>/g,'').length*.028);c.vt=0;
- Q.forEach(o=>{if(o!==c&&o.bubT>0&&o.bubT<99){}})}
+ if(c===act||!act||act.bub.classList.contains('off')){Q.forEach(o=>{if(o!==c){o.bub.classList.add('off');if(o.bubT<99)o.bubT=0}})}else{c.bub.classList.add('off');c.bubT=0}}
 function emote(c,e){c.emo.textContent=e;c.emo.classList.remove('on');void c.emo.offsetWidth;c.emo.classList.add('on');setTimeout(()=>c.emo.classList.remove('on'),1100)}
 function arrive(c){if(S.tut&&!S.upHint&&Object.keys(c.order).some(k=>DR[k])){S.upHint=1;save();setTimeout(()=>hintFlash('💡 Предложи гостю что-нибудь к&nbsp;кофе&nbsp;— кнопка в&nbsp;карточке заказа'),2500)}c.st='wait';c.line=c.thinkT>0?'Ммм… дайте подумать…':orderLine(c);if(!act)setActive(c,true);else{say(c,c.line,false);c.bubT=5;emote(c,'👋')}}
 function setActive(c,silent){if(act===c||(c&&c.atCash))return;if(act){act.el.classList.remove('act');if(act.bubT>=99)act.bubT=2}
@@ -1699,6 +1699,13 @@ restockAll();addEventListener('resize',layout);layout();updNav();hud();chips();$
 window.__dbg={RUSH,updStk,openStock,set served(v){served=v},CUT,playCut,endCut,openHero,CQ,serve,WR,openWrap,HD,Q,CF,goTo,S,get act(){return act},setActive,spawn,STK,HD,finish,choose,togglePause,shake,glow5,mbump,endDay,get dayEarn(){return dayEarn},set dayEarn(v){dayEarn=v},drawCup,drawHeroSprite};
 })();
 </script>
-<style id="slcss"></style>
+<style id="slcss">
+#snd,#pz{right:calc(var(--u)*-6)}#snd{top:calc(var(--u)*-6)}#pz{top:calc(var(--u)*-6 + 40px)}
+#stage:not(.portrait) #ord{padding:calc(var(--u)*9) calc(var(--u)*14);min-width:calc(var(--u)*320);max-width:calc(var(--u)*460)}
+#stage:not(.portrait) #ord .t{font-size:calc(var(--u)*14);margin-bottom:calc(var(--u)*6)}
+#stage:not(.portrait) #ord .t span:last-child{font-size:calc(var(--u)*17)}
+#stage:not(.portrait) .chip{font-size:calc(var(--u)*15);padding:calc(var(--u)*2) calc(var(--u)*10)}
+#stage:not(.portrait) #chips{gap:calc(var(--u)*7);margin-bottom:calc(var(--u)*6)}
+</style>
 </body>
 </html>
