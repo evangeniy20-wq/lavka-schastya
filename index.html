@@ -703,7 +703,11 @@ const DR={
  esp:{n:'Эспрессо',p:150,dose:[17.5,18.5],ext:[25,30],milk:null,fill:null,art:null,d:'18&nbsp;г · 25–30&nbsp;с · без молока'},
  cap:{n:'Капучино',p:290,dose:[17.5,18.5],ext:[25,30],milk:[60,65],fill:[.86,.98],art:'heart',d:'18&nbsp;г · 25–30&nbsp;с · молоко 60–65&nbsp;°C · много пены, сердечко'},
  latte:{n:'Латте',p:320,dose:[17.5,18.5],ext:[25,30],milk:[60,65],fill:[.95,1.05],art:'rosetta',d:'18&nbsp;г · 25–30&nbsp;с · молоко 60–65&nbsp;°C · полная чашка, розетта'},
- flat:{n:'Флэт уайт',p:340,dose:[19.5,20.5],ext:[20,25],milk:[55,60],fill:[.78,.9],art:'tulip',d:'20&nbsp;г · 20–25&nbsp;с (ристретто) · молоко 55–60&nbsp;°C · тонкая пена, тюльпан'}
+ flat:{n:'Флэт уайт',p:340,dose:[19.5,20.5],ext:[20,25],milk:[55,60],fill:[.78,.9],art:'tulip',d:'20&nbsp;г · 20–25&nbsp;с (ристретто) · молоко 55–60&nbsp;°C · тонкая пена, тюльпан'},
+ amer:{n:'Американо',p:230,dose:[17.5,18.5],ext:[35,40],milk:null,fill:null,art:null,d:'18&nbsp;г · 35–40&nbsp;с (длинный) · без молока'},
+ mac:{n:'Макиато',p:260,dose:[17.5,18.5],ext:[25,30],milk:[60,65],fill:[.5,.62],art:null,d:'18&nbsp;г · 25–30&nbsp;с · молоко 60–65&nbsp;°C · совсем немного молока'},
+ mocha:{n:'Мокко',p:360,dose:[17.5,18.5],ext:[25,30],milk:[60,65],fill:[.88,1],art:'heart',d:'18&nbsp;г · 25–30&nbsp;с · молоко 60–65&nbsp;°C · почти полная чашка, сердечко'},
+ raf:{n:'Раф',p:380,dose:[17.5,18.5],ext:[25,30],milk:[65,70],fill:[.92,1.02],art:'tulip',d:'18&nbsp;г · 25–30&nbsp;с · сливочное молоко 65–70&nbsp;°C · полная чашка, тюльпан'}
 };
 const ITEMS={
  truf:{w:'left',n:'Трюфели',s:'трюфели',p:150,r:[245,295,385,355]},
@@ -754,7 +758,7 @@ const hMach=hot(WALL.coffee,'mach',[355,40,1010,560],'Кофемашина',h=>o
 const hGrind=hot(WALL.coffee,'grind',[118,0,348,470],'Кофемолка',h=>openCoffee());
 const hWand=hot(WALL.coffee,'wand',[858,112,1000,432],'Паровая трубка (под рычажком)',h=>openCoffee());
 /* ---------- regulars & faces ---------- */
-const REG=[{n:'Алиса',fav:'latte',v:[520,'triangle']},{n:'Пётр Ильич',fav:'esp',tr:'strict',v:[150,'sawtooth']},{n:'Тимур',fav:'cap',tr:'student',v:[300,'square']},{n:'Вера',fav:'flat',v:[440,'square']},{n:'Бабушка Зина',fav:'latte',tr:'slow',v:[360,'triangle']},{n:'Олег',fav:'esp',tr:'rush',v:[200,'square']},{n:'Маша',fav:null,tr:'kid',v:[720,'square']},{n:'Гоша',fav:'flat',v:[240,'triangle']}];
+const REG=[{n:'Алиса',fav:'latte',v:[520,'triangle']},{n:'Пётр Ильич',fav:'esp',tr:'strict',v:[150,'sawtooth']},{n:'Тимур',fav:'cap',tr:'student',v:[300,'square']},{n:'Вера',fav:'flat',v:[440,'square']},{n:'Бабушка Зина',fav:'raf',tr:'slow',v:[360,'triangle']},{n:'Олег',fav:'amer',tr:'rush',v:[200,'square']},{n:'Маша',fav:null,tr:'kid',v:[720,'square']},{n:'Гоша',fav:'mocha',v:[240,'triangle']}];
 const TRAIT={strict:{i:'😤',d:'строгий: главное&nbsp;— качество кофе, на&nbsp;чаевые скуп'},student:{i:'🎒',d:'студент: берёт недорогое, чаевые скромные'},slow:{i:'🧓',d:'долго думает и&nbsp;может передумать, зато терпелива'},rush:{i:'⚡',d:'торопыга: мало терпения, щедрые чаевые'},kid:{i:'🧒',d:'не&nbsp;знает названий&nbsp;— описывает товар загадкой'}};
 const RIDDLE={bearck:'шоколадного мишку',angel:'фигурку с&nbsp;крылышками',kids:'фигурки из&nbsp;шоколада',macaron:'разноцветное печенье-кружочек',monamour:'печенье-сердечко',truf:'шоколадный шарик в&nbsp;крошке',iris:'ириски в&nbsp;белой коробочке',sticks:'песочное печенье в&nbsp;оранжевой коробке'};
 // eye boxes in sprite pixels [x1,y1,x2,y2]; closed = eyes already drawn closed
@@ -805,7 +809,7 @@ const LINES={hi:['Здравствуйте! Мне,&nbsp;пожалуйста,',
  queue:['Я&nbsp;тоже жду!','Эй, тут очередь!','Обслужите и&nbsp;меня…'],
  bye:['Спасибо! До свидания!','Чудесно, спасибо!','Вот это сервис!'],
  angry:['Долго! Пойду в&nbsp;другое место.','Ну и&nbsp;очередь… Ухожу.']};
-const FAVTALK={latte:'Обожаю латте&nbsp;— побольше молока!',esp:'Я пью только эспрессо, без&nbsp;глупостей.',cap:'Капучино с&nbsp;сердечком&nbsp;— моя слабость.',flat:'Флэт уайт&nbsp;— крепко и&nbsp;бархатно.'};
+const FAVTALK={latte:'Обожаю латте&nbsp;— побольше молока!',esp:'Я пью только эспрессо, без&nbsp;глупостей.',cap:'Капучино с&nbsp;сердечком&nbsp;— моя слабость.',flat:'Флэт уайт&nbsp;— крепко и&nbsp;бархатно.',amer:'Мне американо&nbsp;— долго и&nbsp;не&nbsp;спеша.',raf:'Раф&nbsp;— только на&nbsp;сливках!',mocha:'Мокко&nbsp;— с&nbsp;шоколадом, как&nbsp;в&nbsp;вашей лавке.'};
 let cid=0;
 const WALLS2=['front','left'];
 function wantWall(c){const rem=Object.keys(c.order).filter(k=>!DR[k]&&(c.got[k]||0)<c.order[k]&&WALLS2.includes(ITEMS[k].w)).map(k=>ITEMS[k].w);if(!rem.length)return null;return rem.includes(c.wall)?c.wall:rem[0]}
@@ -830,7 +834,7 @@ function spawn(){
  if(S.tut)for(const k in o)if(!DR[k]){o[k]=Math.min(o[k],STK[k]||0);if(o[k]<=0)delete o[k]}
  if(!Object.keys(o).filter(k=>!DR[k]).length){const kk=rnd(keys.filter(k=>(STK[k]||0)>0||!S.tut)||keys);o[kk]=1}
  let usual=null;
- if(R.fav&&Math.random()<.65){const d=Math.random()<.75?R.fav:rnd(Object.keys(DR));o[d]=1;if(d===R.fav&&hearts(R.n)>=2&&Math.random()<.65)usual=d}
+ if(R.fav&&Math.random()<.65){const d=Math.random()<.5?R.fav:rnd(Object.keys(DR));o[d]=1;if(d===R.fav&&hearts(R.n)>=2&&Math.random()<.65)usual=d}
  if(R.fav&&S.day>=3&&Math.random()<.25){const d2=rnd(Object.keys(DR).filter(k=>!o[k]));o[d2]=1}
  if(!S.tut){o={macaron:1,esp:1};usual=null}
  const nd=Object.keys(o).filter(k=>DR[k]).length;
@@ -1077,7 +1081,7 @@ function drawGauge(){
  g.fillStyle=s==='milk'&&CF.v>75?'#e0503c':'#f2b84b';g.fillRect(2,5,(116*Math.min(1,v))|0,2);
  g.fillStyle='#fff';g.fillRect((2+116*Math.min(1,v)-1)|0,1,2,10);$('#gval').innerHTML=txt;
 }
-const CUPS={esp:{x:10,w:12,top:18,bot:27,body:'#f4efe6',band:null},cap:{x:8,w:16,top:9,bot:28,body:'#f4efe6',band:'#d8362a'},latte:{x:10,w:12,top:5,bot:29,body:'rgba(220,235,245,.55)',band:null},flat:{x:9,w:14,top:14,bot:28,body:'#e8e0d0',band:'#2a5ac8'}};
+const CUPS={esp:{x:10,w:12,top:18,bot:27,body:'#f4efe6',band:null},cap:{x:8,w:16,top:9,bot:28,body:'#f4efe6',band:'#d8362a'},latte:{x:10,w:12,top:5,bot:29,body:'rgba(220,235,245,.55)',band:null},flat:{x:9,w:14,top:14,bot:28,body:'#e8e0d0',band:'#2a5ac8'},amer:{x:9,w:14,top:12,bot:28,body:'#f4efe6',band:'#555'},mac:{x:11,w:10,top:15,bot:27,body:'#e8e0d0',band:'#caa24a'},mocha:{x:9,w:14,top:10,bot:28,body:'#d9c3a5',band:'#5a3420'},raf:{x:9,w:14,top:7,bot:29,body:'rgba(235,225,245,.7)',band:'#7a4a8a'}};
 function drawArt(g,art,R){
  const cx=16,cy=16;g.fillStyle='#2a1712';g.beginPath();g.arc(cx,cy,13,0,7);g.fill();g.fillStyle='#f4efe6';g.beginPath();g.arc(cx,cy,12,0,7);g.fill();
  g.fillStyle='#8a4a22';g.beginPath();g.arc(cx,cy,10,0,7);g.fill();g.fillStyle='#a8622e';g.beginPath();g.arc(cx,cy,9,0,7);g.fill();
@@ -1092,7 +1096,7 @@ function kDraw(g,k,x,y){const p=KM[k];g.drawImage(CUPA,p[0],p[1],p[2],p[3],x,y,p
 function drawCup(T){const g=cc;g.setTransform(1,0,0,1,0,0);g.clearRect(0,0,64,64);g.imageSmoothingEnabled=false;if(!CF.drink)return;
  const d=DR[CF.drink],okA=CUPA.complete&&CUPA.naturalWidth;
  if(okA&&CF.fin&&CF.last!==null){const k=d.art?(CF.last<.5?'a1':{heart:'a2',tulip:'a3',rosetta:'a4'}[d.art]||'a1'):'a0';kDraw(g,k,2,6);return}
- if(okA&&CF.drink!=='esp'&&!CF.fin){const s=cur(),R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h)};const esp=['milk','pour'].includes(s)||(s==='ext'&&CF.t>3),milk=s==='pour'&&CF.v>.3;
+ if(okA&&DR[CF.drink].milk&&!CF.fin){const s=cur(),R=(x,y,w,h,c)=>{g.fillStyle=c;g.fillRect(x,y,w,h)};const esp=['milk','pour'].includes(s)||(s==='ext'&&CF.t>3),milk=s==='pour'&&CF.v>.3;
   kDraw(g,milk?'cf':esp?'cs':'ce',10,4);
   if(s==='pour'&&CF.held)R(31,0,3,8,'#f1ede4');if(s==='ext'&&CF.run){R(29,0,2,8,'#5a2a10');R(34,0,2,8,'#5a2a10')}
   if(s==='milk'&&CF.held)for(let i=0;i<4;i++)R((12+((T*60+i*14)%36))|0,(2+i*3)%10,3,2,'rgba(255,255,255,.6)');return}
@@ -1104,7 +1108,7 @@ function drawCupOld(T){
  const c=CUPS[CF.drink],s=cur(),H=c.bot-c.top;
  R(c.x-1,c.top-1,c.w+2,H+2,'#2a1712');R(c.x,c.top,c.w,H,c.body);if(c.band)R(c.x,c.top+(H*.45|0),c.w,3,c.band);
  R(c.x+c.w+1,c.top+3,2,5,'#2a1712');
- let esp=0,milk=0;const espMax=CF.drink==='esp'?.8:.3;
+ let esp=0,milk=0;const espMax=!DR[CF.drink].milk?.8:.3;
  if(['milk','pour'].includes(s))esp=espMax;else if(s==='ext')esp=Math.min(espMax,CF.t/30*espMax);
  if(s==='pour')milk=Math.max(0,CF.v-.3);
  if(esp+milk>0){const lv=Math.min(1.05,esp+milk),top=Math.max(c.top-1,Math.round(c.bot-H*lv));R(c.x,top,c.w,c.bot-top,milk>0?'#c89a6a':'#4a2410');if(milk>0)R(c.x,Math.round(c.bot-H*esp),c.w,Math.round(H*esp),'#6a3418');if(milk>0)R(c.x,top,c.w,2,'#f2e2c8')}
@@ -1706,6 +1710,9 @@ window.__dbg={RUSH,updStk,openStock,set served(v){served=v},CUT,playCut,endCut,o
 #stage:not(.portrait) #ord .t span:last-child{font-size:calc(var(--u)*17)}
 #stage:not(.portrait) .chip{font-size:calc(var(--u)*15);padding:calc(var(--u)*2) calc(var(--u)*10)}
 #stage:not(.portrait) #chips{gap:calc(var(--u)*7);margin-bottom:calc(var(--u)*6)}
+#dsel{grid-template-columns:repeat(2,minmax(0,1fr))}
+#dsel button{min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:calc(var(--u)*6) calc(var(--u)*8);font-size:calc(var(--u)*14);line-height:1.15}
+#dsel button .sm{font-size:calc(var(--u)*11);margin-top:calc(var(--u)*2)}
 </style>
 </body>
 </html>
