@@ -770,7 +770,7 @@ let S={day:1,money:0,rel:{},up:{},mute:false,sfxMute:false,tut:0,train:0,vol:{ma
 const SAVE_V=2;function migrateSave(v){if(!v.v)v.v=1;/* v1→v2: только номер версии */if(v.v<2)v.v=2;return v}
 function readSave(k){try{const v=JSON.parse(localStorage.getItem(k)||'null');return v&&typeof v==='object'&&v.day?v:null}catch(e){return null}}
 {const v=readSave('lavka_v4')||readSave('lavka_v4_bak');if(v)S=Object.assign(S,migrateSave(v))}S.v=SAVE_V;
-S.vol=Object.assign({ma:.9,mu:.7,vo:.9,sf:.8},S.vol||{});
+S.vol=Object.assign({ma:.9,mu:.7,vo:.9,sf:.8},S.vol||{});S.ks=S.ks||1;try{applyKs()}catch(e){}
 const save=()=>{if(window.__noSave)return;try{S.v=SAVE_V;const p=localStorage.getItem('lavka_v4');if(p)localStorage.setItem('lavka_v4_bak',p);localStorage.setItem('lavka_v4',JSON.stringify(S))}catch(e){}};
 let paused=false,playing=false,served=0,spawned=0,spawnT=0,dayEarn=0,vi=0,streak=0,dayStars=[];
 const Q=[];let act=null;const SLOTS=[0,-.52,.52];const BIGW=['giftbox','bearbox','sbox','orange','macbox','macmini','candy','monamour','iris'];
@@ -1288,8 +1288,9 @@ function blip(c){if(!ac||S.sfxMute)return;window.__blips=(window.__blips||0)+1;c
  if(mus&&!S.mute){mus.out.gain.cancelScheduledValues(t);mus.out.gain.setTargetAtTime(.3,t,.05);mus.out.gain.setTargetAtTime(.55,t+.35,.25)}}
 function guestsUI(){$('#guests').innerHTML=REG.map(r=>{const h=hearts(r.n);return'<div>'+r.n+(r.tr?' '+TRAIT[r.tr].i:'')+' <i>'+'♥'.repeat(h)+'♡'.repeat(5-h)+'</i><span class="sm">'+(r.tr?TRAIT[r.tr].d:'обычный гость')+(r.fav&&h>=1?' · любит: '+DR[r.fav].n.toLowerCase():r.fav?' · любимый напиток: ?':'')+'</span></div>'}).join('')}
 const VOLN={ma:'🔊 Общая',mu:'🎵 Музыка',vo:'🗣 Голоса',sf:'🔔 Звуки'};
-function volsUI(){const v=$('#vols');v.innerHTML=Object.keys(VOLN).map(k=>'<span>'+VOLN[k]+'</span><input type="range" min="0" max="100" step="1" value="'+Math.round(S.vol[k]*100)+'" data-k="'+k+'" aria-label="'+VOLN[k]+'"><b>'+Math.round(S.vol[k]*100)+'%</b>').join('');
- v.querySelectorAll('input').forEach(i=>{i.addEventListener('input',()=>{const k=i.dataset.k;S.vol[k]=i.value/100;i.nextElementSibling.textContent=i.value+'%';ensureAudio();applyVol();if(k==='vo'&&Q[0])blip(Q[0]);if(k==='sf')sfx('pick')});i.addEventListener('change',save)})}
+function applyKs(){document.documentElement.style.setProperty('--ks',String(S.ks||1))}
+function volsUI(){const v=$('#vols');v.innerHTML=Object.keys(VOLN).map(k=>'<span>'+VOLN[k]+'</span><input type="range" min="0" max="100" step="1" value="'+Math.round(S.vol[k]*100)+'" data-k="'+k+'" aria-label="'+VOLN[k]+'"><b>'+Math.round(S.vol[k]*100)+'%</b>').join('')+'<span>🔘 Кнопки</span><input type="range" min="70" max="160" step="5" value="'+Math.round((S.ks||1)*100)+'" data-ks="1" aria-label="Размер кнопок"><b>'+Math.round((S.ks||1)*100)+'%</b>';
+ v.querySelectorAll('input').forEach(i=>{if(i.dataset.ks){i.addEventListener('input',()=>{S.ks=i.value/100;i.nextElementSibling.textContent=i.value+'%';applyKs()});i.addEventListener('change',save);return}i.addEventListener('input',()=>{const k=i.dataset.k;S.vol[k]=i.value/100;i.nextElementSibling.textContent=i.value+'%';ensureAudio();applyVol();if(k==='vo'&&Q[0])blip(Q[0]);if(k==='sf')sfx('pick')});i.addEventListener('change',save)})}
 function pauseUI(){volsUI();$('#ptrain').textContent='Тренажёр: '+(S.train?'вкл':'выкл');$('#pmus').textContent='Музыка: '+(S.mute?'выкл':'вкл');$('#psfx').textContent='Звуки: '+(S.sfxMute?'выкл':'вкл');$('#preset').textContent='Сбросить прогресс';$('#preset').dataset.arm='';guestsUI()}
 function togglePause(on){if($('#menu').style.display!=='none'&&on)return;paused=on;$('#pause').classList.toggle('on',on);if(on){stopLoop();CF.held=false;$('#act').classList.remove('held');pauseUI()}}
 $('#pz').addEventListener('click',e=>{e.stopPropagation();ensureAudio();togglePause(!paused)});
@@ -1610,7 +1611,7 @@ function supRow(it,i){const q=it.def==='short'?it.n-1:it.n,c=ICOL[it.k]||'#ddd',
  const tiles=Array.from({length:q},(_,j)=>th?'<img src="'+(THUMB[it.k][(j+i)%THUMB[it.k].length])+'" alt="" style="animation-delay:'+(j*90)+'ms">':'<i style="background:'+c+';animation-delay:'+(j*70)+'ms"></i>').join('');
  return '<div class="sr'+(it.open?' open':'')+(it.dec==='ok'?' dok':it.dec==='no'?' dno':'')+'" data-i="'+i+'" style="animation-delay:'+(i*130)+'ms"><div class="sbx"><div class="sbody'+(it.def==='melt'?' melt':'')+'">'+tiles+(it.def==='melt'?'<u>💧</u>':'')+'</div><div class="slid"></div><em>Открыть</em></div>'+
  '<div class="sright"><div class="sin"><b>'+ITEMS[it.k].n+'</b><span>по накладной: ×'+it.n+'</span></div><div class="sbt"><button class="ok"'+(it.open?'':' disabled')+'>✓ Верно</button><button class="no"'+(it.open?'':' disabled')+'>⚠ Претензия</button></div></div></div>'}
-function openSupply(){if(!DEL.pending||SPS.on)return;ensureAudio();SPS.on=true;SP.classList.add('on');$('#spno').textContent='№ '+DEL.no;
+function openSupply(){if(!DEL.pending||SPS.on)return;ensureAudio();{const st=$('#spstamp');if(st){st.className='';st.textContent=''}}SPS.on=true;SP.classList.add('on');$('#spno').textContent='№ '+DEL.no;
  $('#sprows').innerHTML=DEL.items.map(supRow).join('');$('#spmsg').textContent='Открой коробки и сверь с накладной';girl('');supUpd();sfx('whoosh');supHL();
  SP.querySelectorAll('.sr').forEach(r=>{const i=+r.dataset.i,it=DEL.items[i];
   r.querySelector('.sbx').addEventListener('click',()=>{if(it.open)return;it.open=true;r.classList.add('open');r.querySelectorAll('.sbt button').forEach(b=>b.disabled=false);sfx('tape');setTimeout(()=>sfx('rustle'),180);girl(it.def==='melt'?'melt':'open');if(it.def==='melt')setTimeout(()=>sfx('bad'),380);supUpd()});
@@ -1726,6 +1727,8 @@ window.__dbg={get HD(){return HD},get Q(){return Q},get mus(){return mus},get ac
 #dsel button{min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:calc(var(--u)*6) calc(var(--u)*8);font-size:calc(var(--u)*14);line-height:1.15}
 #dsel button .sm{font-size:calc(var(--u)*11);margin-top:calc(var(--u)*2)}
 @media(orientation:landscape){#tlogo{top:3%}#tbtns{top:52%}#tbtns button{min-width:calc(var(--u)*280);padding:calc(var(--u)*7) calc(var(--u)*24)}#tvig{background:radial-gradient(ellipse at 70% 55%,transparent 50%,rgba(5,7,16,.5)),linear-gradient(90deg,rgba(8,10,22,.55),transparent 38%),linear-gradient(180deg,rgba(8,10,22,.5),transparent 28%)}}
+#tl,#tr,#nav{zoom:var(--ks,1)}
+#vols .ksr{display:contents}
 </style>
 </body>
 </html>
